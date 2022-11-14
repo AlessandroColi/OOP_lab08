@@ -17,6 +17,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.List;
 import java.util.Random;
+import java.util.stream.IntStream;
 
 /**
  * This class is a simple application that writes a random number on a file.
@@ -44,9 +45,29 @@ public class BadIOGUI {
         final JButton write = new JButton("Write on file");
         frame.setContentPane(canvas);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        
+        final JPanel mio = new JPanel();
+        mio.setLayout(new BoxLayout(mio, BoxLayout.X_AXIS));
+        canvas.add(mio);
+        mio.add(write);
+        final JButton read = new JButton("read file");
+        mio.add(read);
         /*
          * Handlers
          */
+        read.addActionListener(new ActionListener() {
+        	public void actionPerformed(final ActionEvent e1) {
+        		try {
+        			File inFile = new File(PATH);
+					List<String> readable = Files.readAllLines(inFile.toPath());
+					System.out.println("number: " + Integer.parseInt(readable.get(0)));
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+        	}
+        });
+        
         write.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(final ActionEvent e) {
@@ -90,6 +111,7 @@ public class BadIOGUI {
          * OK, ready to push the frame onscreen
          */
         frame.setVisible(true);
+        frame.pack();
     }
 
     /**
@@ -101,3 +123,5 @@ public class BadIOGUI {
        new BadIOGUI().display();
     }
 }
+
+
